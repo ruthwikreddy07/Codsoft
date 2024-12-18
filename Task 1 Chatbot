@@ -1,0 +1,81 @@
+import random
+
+# Static responses
+R_EATING = "I don't like eating anything because I'm a Bot obviously!"
+R_TIME = "I'm not sure about the time, but I can help you with many things!"
+R_HOBBIES = "I enjoy learning new things and chatting with you!"
+R_FEELINGS = "I don’t have feelings, but I’m here to make you feel better!"
+
+# Function for unknown inputs
+def unknown():
+    responses = [
+        "Could you please re-phrase that?",
+        "...",
+        "Sounds about right.",
+        "What does that mean?",
+        "I'm not sure I understand."
+    ]
+    return random.choice(responses)
+
+def chatbot():
+    print("Chatbot: Hi there! I'm your chatbot. Ask me something!")
+    print("Type 'bye' to end the chat.")
+    
+    while True:
+        try:
+            # Get user input
+            user_input = input("You: ").strip().lower()
+        except EOFError:
+            # Handle end of input gracefully
+            print("\nChatbot: It seems we’re out of inputs. Goodbye!")
+            break
+
+        # Exit condition
+        if user_input in ["bye", "goodbye", "exit", "quit"]:
+            print("Chatbot: Goodbye! Have a nice day!")
+            break
+
+        # Predefined responses
+        if "eat" in user_input or "food" in user_input:
+            print(f"Chatbot: {R_EATING}")
+        elif "time" in user_input:
+            print(f"Chatbot: {R_TIME}")
+        elif user_input in ["hello", "hi", "hey"]:
+            print("Chatbot: Hello! How can I assist you today?")
+        elif user_input in ["how are you", "how are you doing"]:
+            print("Chatbot: I'm just a bot, but I'm doing great! Thanks for asking.")
+        elif user_input == "tell me a joke":
+            print("Chatbot: Why don’t skeletons fight each other? They don’t have the guts!")
+        elif user_input == "what is your name":
+            print("Chatbot: I am an unnamed chatbot, but you can call me whatever you like!")
+        elif user_input == "what can you do":
+            print("Chatbot: I can chat with you, tell jokes, and answer simple questions. Just try me!")
+        elif "weather" in user_input:
+            print("Chatbot: I can't check the weather, but I can help you with many other things!")
+        elif user_input == "thank you":
+            print("Chatbot: You're welcome! Let me know if you need anything else.")
+        elif user_input == "who are you":
+            print("Chatbot: I am a chatbot created to help you with any questions or just chat!")
+        elif user_input == "what is 2 + 2":
+            print("Chatbot: 2 + 2 is 4!")
+        elif "hobby" in user_input or "hobbies" in user_input:
+            print(f"Chatbot: {R_HOBBIES}")
+        elif "how do you feel" in user_input or "feelings" in user_input:
+            print(f"Chatbot: {R_FEELINGS}")
+        elif "color" in user_input:
+            print("Chatbot: I don’t see colors, but I imagine they’re all amazing!")
+        elif "do you have friends" in user_input:
+            print("Chatbot: I have lots of friends—like you and everyone I get to chat with!")
+        elif "tell me a fact" in user_input:
+            print("Chatbot: Did you know? Honey never spoils! Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3000 years old and still edible.")
+        elif "sing" in user_input or "song" in user_input:
+            print("Chatbot: I wish I could sing, but I can hum a virtual tune for you: Hmm hmm hmm!")
+        elif "dance" in user_input:
+            print("Chatbot: I can’t dance, but I’ll imagine doing the robot dance right now!")
+        else:
+            # Handle unknown inputs
+            print(f"Chatbot: {unknown()}")
+
+# Run the chatbot
+if __name__ == "__main__":
+    chatbot()
