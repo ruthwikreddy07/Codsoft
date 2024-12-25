@@ -1,0 +1,64 @@
+import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+import warnings
+warnings.filterwarnings("ignore")
+# Step 2: Upload your dataset
+print("wiki_movie_plots_deduped.csv")
+# Open a file dialog to select the CSV file
+Tk().withdraw()  # Prevents the root window from appearing
+file_path = askopenfilename(filetypes=[("CSV Files", "*.csv")])
+if not file_path:
+    raise ValueError("No file selected!")
+
+# Load the dataset
+movies = pd.read_csv(file_path)
+
+# Display the first few rows of the dataset
+print("\nYour Dataset:")
+display(movies.head())
+# Step 3: Preprocess the data
+# Ensure the dataset contains 'Title' and 'Genre' columns
+if 'Title' not in movies.columns or 'Genre' not in movies.columns:
+    raise ValueError("The dataset must contain 'Title' and 'Genre' columns!")
+
+# Combine relevant text data for vectorization
+movies['Content'] = movies['Title'] + " " + movies['Genre']
+# Step 4: Vectorize the data and calculate cosine similarity
+vectorizer = CountVectorizer()
+content_matrix = vectorizer.fit_transform(movies['Content'])
+
+# Calculate cosine similarity
+cosine_sim = cosine_similarity(content_matrix)
+# Step 5: Define the recommendation function
+def get_recommendations(title, cosine_sim=cosine_sim, movies=movies):
+    try:
+        # Find the index of the movie
+        idx = movies.index[movies['Title'] == title][0]
+        
+        # Get similarity scores for the movie
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        
+        # Sort by similarity score
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        
+        # Get the top 3 similar movies (excluding the input movie)
+        sim_scores = sim_scores[1:4]
+        
+        # Get the movie indices
+        movie_indices = [i[0] for i in sim_scores]
+        
+        # Return the top 3 similar movies
+        return movies['Title'].iloc[movie_indices]
+    except IndexError:
+        return "The movie title is not in the dataset."
+# Step 6: Get user input for a movie title
+print("\nEnter a movie title for recommendations:")
+user_input = input("Movie Title: ")
+
+# Get recommendations and display results
+recommended_movies = get_recommendations(user_input)
+print(f"\nMovies recommended for '{user_input}':")
+print(recommended_movies)
